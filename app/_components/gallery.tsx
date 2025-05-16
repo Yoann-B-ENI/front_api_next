@@ -21,16 +21,16 @@ export default function Gallery({ titleText, description, imgArray }: GalleryPro
               <div key = {idx} className="lg:w-1/3 sm:w-1/2 p-4">
                 <div className="flex relative">
                   <Image
-                    src="https://dummyimage.com/600x360"
+                    src={imgElem.url!}
                     width={360}
                     height={600}
                     alt="gallery image"
                     className="absolute inset-0 w-full h-full object-cover object-center"
                   />
                   <div className="px-8 py-10 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-100">
-                    <h2 className="tracking-widest text-sm title-font font-medium text-blue-400 mb-1">{imgElem.title}</h2>
-                    <h1 className="title-font text-lg font-medium text-white mb-3">Shooting Stars</h1>
-                    <p className="leading-relaxed">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+                    <h2 className="tracking-widest text-sm title-font font-medium text-blue-400 mb-1">{imgElem.artist_display +' - '+ imgElem.date_display}</h2>
+                    <h1 className="title-font text-lg font-medium text-white mb-3">{imgElem.title.substring(0, 40)+'...'}</h1>
+                    <p className="leading-relaxed">{imgElem.description ? imgElem.description.substring(0, 50)+'...' : "No description found"}</p>
                   </div>
                 </div>
               </div>

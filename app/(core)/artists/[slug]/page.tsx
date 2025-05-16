@@ -2,6 +2,7 @@ import Gallery from '@components/gallery'
 import { notFound } from 'next/navigation'
 
 
+// for url construction, see https://api.artic.edu/docs/#iiif-image-api
 async function fetchArtwork(id: number): Promise<Artwork |null>{
     try {
         const temp = await fetch(`https://api.artic.edu/api/v1/artworks/${id}?fields=id,title,date_display,artist_display,description,image_id`)
@@ -51,22 +52,12 @@ export default async function Page({
         // do not return, it's fine if an artist has no artworks
     }
 
-    const enrichedArtworks = await Promise.all(rawArtworks.map((elem) => fetchArtwork(elem.id)))
-
+    const enrichedArtworks: (Artwork | null)[] = await Promise.all(rawArtworks.map((elem) => fetchArtwork(elem.id)))
+    const filteredArtworks: Artwork[] = enrichedArtworks.filter(x => x !== null)
+    
     return (
       <div>
-        <Gallery titleText={"Artist " +slug+ ": " +rawArtist.data.title} description={rawArtist.data.description} imgArray={rawArtworks}/>
-        <ul>
-            {enrichedArtworks.map((elem, index) => (
-                <li key={index}>
-                    <p>{JSON.stringify(elem, null, 2)}</p>
-                </li>
-            ))}
-            {/* {enrichedArtworks.map((artwork: Artwork) => (
-                <li key={artwork.id}>{artwork}</li>
-                )
-            )} */}
-        </ul>
+        <Gallery titleText={"Artist " +slug+ ": " +rawArtist.data.title} description={rawArtist.data.description} imgArray={filteredArtworks}/>
       </div>
     );
 }
