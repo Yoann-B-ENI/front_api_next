@@ -15,11 +15,14 @@ export default async function Page({
 }) {
     const { page = '1', sort = 'asc', query = '' } = await searchParams
 
+    const parsedPage = parseInt(page, 10);
+    const validPage = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
+
     let artistList: Artist[];
     let pagination: Pagination;
 
     try{
-        const temp: ArtistsApiResponse = await fetchArtists(page)
+        const temp: ArtistsApiResponse = await fetchArtists(validPage)
         artistList = temp.data
         pagination = temp.pagination
     } catch (err: any) {
@@ -36,7 +39,7 @@ export default async function Page({
           <div className="container px-5 py-24 mx-auto">
             <div className="flex flex-wrap w-full mb-20 flex-col items-center text-center">
               <h1 className="sm:text-3xl text-2xl font-medium title-font mb-2 text-white">Artist list</h1>
-              <p className="lg:w-1/2 w-full leading-relaxed text-opacity-80">Showing page {page}</p>
+              <p className="lg:w-1/2 w-full leading-relaxed text-opacity-80">Showing page {validPage}</p>
             </div>
 
             <div className="flex flex-wrap -m-4">
@@ -52,7 +55,7 @@ export default async function Page({
 
           <PaginationButtons
             url="/artists"
-            page={page}
+            page={validPage}
             pagination={pagination}
           />
 
