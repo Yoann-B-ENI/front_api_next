@@ -15,7 +15,7 @@ export async function fetchOneArtist(slug: string): Promise<Artist>{
 
 export async function fetchAllLazyArtworksByArtist(slug: string): Promise<Artwork[]>{
     const baseUrl = process.env.PUBLIC_API_URL;
-    const rqArtworks = await fetch(`${baseUrl}/artworks/search?query[term][artist_id]=${slug}&fields=id,title`)
+    const rqArtworks = await fetch(`${baseUrl}/artworks/search?query[term][artist_id]=${slug}&fields=id,title&page=1&limit=9`)
     if (!rqArtworks.ok) throw new Error("Something went wrong fetching artworks")
     return rqArtworks.json()
 }

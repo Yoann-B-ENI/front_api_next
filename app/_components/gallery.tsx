@@ -6,6 +6,7 @@ type GalleryProps = {
   imgArray: Artwork[];
 };
 
+//TODO make the string truncation normal (dynamic, extracted)
 export default function Gallery({ titleText, description, imgArray }: GalleryProps) {
     return (
     <section className="text-gray-400 bg-gray-900 body-font">
@@ -16,6 +17,8 @@ export default function Gallery({ titleText, description, imgArray }: GalleryPro
         </div>
 
         <div className="flex flex-wrap -m-4">
+
+            {!imgArray && <p>No artworks available for this artist</p>}
 
             {imgArray.map((imgElem, idx) => (
               <div key = {idx} className="lg:w-1/3 sm:w-1/2 p-4">

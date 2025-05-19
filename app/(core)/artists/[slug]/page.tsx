@@ -13,19 +13,24 @@ export default async function Page({
     let rawArtist;
     let rawArtworks: Artwork[] = [];
 
+    // ** Fetch artist **
     try{
         rawArtist = await fetchOneArtist(slug);
     } catch (err: any){ //TODO catch more precisely
-        console.error(err);        // notFound(); // -> next 404 page
-        return <div>Artist not found with error: {err.message}</div>; //early return
+        console.error(`Error fetch artist ${slug}`, err.message);
+        notFound();
+        // return <div>Artist not found with error: {err.message}</div>; //early return
     }
+    if (!rawArtist){notFound();}
 
-    try{ // should only try if artist was found
+    // ** Fetch artworks of the artist **
+    // > should only try if artist was found
+    // > hardcoded only fetch first 9
+    // > don't return if not found, we still display the artist
+    try{
         rawArtworks = (await fetchAllLazyArtworksByArtist(slug)).data
-        console.log(rawArtworks)
     } catch (err){
-        console.error(err)
-        // do not return, it's fine if an artist has no artworks
+        console.error(`Error fetching artworks of artist ${slug}`, err.message)
     }
 
     const enrichedArtworks: (Artwork | null)[] = await Promise.all(rawArtworks.map((elem) => fetchArtwork(elem.id)))
